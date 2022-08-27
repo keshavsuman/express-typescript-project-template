@@ -6,10 +6,29 @@ import { AuthenticationService } from "../service";
 export async function login(req: Request, res: Response) {
   try {
     const { email, password } = req.body;
-    if (await AuthenticationService.findUserByEmail(email)) {
+    const user: User | null = await AuthenticationService.findUserByEmail(
+      email
+    );
+    if (user) {
+      if (AuthenticationService.comparePassword(password, user.password)) {
+        res.status(httpStatus.OK).send({
+          statusCode: httpStatus.OK,
+          message: "User login successfully",
+          data: {
+            user,
+            token: AuthenticationService.generateToken(user),
+          },
+        });
+      } else {
+        res.status(httpStatus.BAD_REQUEST).send({
+          statusCode: httpStatus.BAD_REQUEST,
+          message: "Password doesn't matched",
+        });
+      }
     } else {
-      res.status(httpStatus.OK).send({
-        statusCode: httpStatus.OK,
+      res.status(httpStatus.BAD_REQUEST).send({
+        statusCode: httpStatus.BAD_REQUEST,
+        message: "User doesn't Exists",
       });
     }
   } catch (error) {
@@ -29,10 +48,11 @@ export async function signup(req: Request, res: Response) {
         message: "User with this email already exists",
       });
     } else {
+      let names = name.split(" ");
       const user = {
         email,
-        firstName: name.split(" ")[0],
-        lastName: name.split(" ")[1],
+        firstName: names[0],
+        lastName: names.splice(1).join(" "),
         password: AuthenticationService.hashPassword(password),
       };
       const createdUser = await AuthenticationService.createUser(user as User);
@@ -40,7 +60,7 @@ export async function signup(req: Request, res: Response) {
         statusCode: httpStatus.OK,
         message: "User created successfully",
         data: {
-          createdUser,
+          user: createdUser,
           token: AuthenticationService.generateToken(createdUser),
         },
       });

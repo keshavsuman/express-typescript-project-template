@@ -7,6 +7,8 @@ export interface User extends Document {
   password: string;
   isProfileCompleted: boolean;
   isEmailVerified: boolean;
+  razorpayKeyId: string;
+  razorpayKeySecret: string;
   updatedAt: Date;
   createdAt: Date;
 }
@@ -32,6 +34,12 @@ const userSchema: Schema = new Schema(
     isEmailVerified: {
       type: Boolean,
       default: false,
+    },
+    razorpayKeyId: {
+      type: mongoose.Schema.Types.String,
+    },
+    razorpayKeySecret: {
+      type: mongoose.Schema.Types.String,
     },
   },
   {

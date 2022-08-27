@@ -15,8 +15,6 @@ Mongoose.connection.on("connected", () => {
   console.log("database connected");
 });
 
-// cron.schedule("10/10 * * * *",);
-
 app.use("/", router);
 
 app.listen(process.env.PORT, () => {

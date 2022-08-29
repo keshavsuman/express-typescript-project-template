@@ -20,7 +20,7 @@ export async function createOrder(
     razorpayKeyId: 1,
     razorpayKeySecret: 1,
   });
-
+  // console.log(user);
   const razorpay = new Razorpay({
     key_id: user?.razorpayKeyId,
     key_secret: user?.razorpayKeySecret,
@@ -45,16 +45,21 @@ export async function saveClientCredentials(
   keyId: string,
   keySecret: string
 ) {
-  const encryptedKeyId = CryptoJS.AES.encrypt(
-    keyId,
-    process.env.razorpayEncryptonKey!
+  // const encryptedKeyId = CryptoJS.AES.encrypt(
+  //   keyId,
+  //   process.env.razorpayEncryptonKey!
+  // );
+  // const encryptedKeySecret = CryptoJS.AES.encrypt(
+  //   keySecret,
+  //   process.env.RazorpayEncryptionKey!
+  // );
+
+  return await UserModel.findByIdAndUpdate(
+    userId,
+    {
+      razorpayKeyId: keyId,
+      razorpayKeySecret: keySecret,
+    },
+    { new: true }
   );
-  const encryptedKeySecret = CryptoJS.AES.encrypt(
-    keySecret,
-    process.env.razorpayEncryptonKey!
-  );
-  return await UserModel.findByIdAndUpdate(userId, {
-    razorpayKeyId: encryptedKeyId,
-    razorpayKeySecret: encryptedKeySecret,
-  });
 }

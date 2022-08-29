@@ -1,2 +1,3 @@
 import UserModel from "./user.model";
-export { UserModel };
+import RazorpayOrderModel from "./razorpayOrders.model";
+export { UserModel, RazorpayOrderModel };

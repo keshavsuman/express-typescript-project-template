@@ -4,7 +4,7 @@ import authRoutes from "./auth.routes";
 
 const routes = Router();
 
-routes.use("/razorpay", razorpayRoutes);
 routes.use("/auth", authRoutes);
+routes.use("/razorpay", razorpayRoutes);
 
 export default routes;

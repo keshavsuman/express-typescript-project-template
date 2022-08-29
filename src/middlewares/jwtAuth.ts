@@ -25,7 +25,7 @@ export default async function verify(
         token,
         process.env.JWT_Token!
       ) as JwtVerify;
-      res.set("userId", user.id);
+      res.set("userId", user._id);
       res.set("firstName", user.firstName);
       res.set("lastName", user.lastName);
       res.set("email", user.email);

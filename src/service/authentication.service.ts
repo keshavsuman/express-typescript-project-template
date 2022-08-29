@@ -56,5 +56,5 @@ export function comparePassword(
  * @returns {String}
  */
 export function generateToken(user: User): string {
-  return jsonwebtoken.sign(user, "af");
+  return jsonwebtoken.sign(user, process.env.JWT_Token!);
 }

@@ -16,7 +16,7 @@ export async function login(req: Request, res: Response) {
           message: "User login successfully",
           data: {
             user,
-            token: AuthenticationService.generateToken(user),
+            token: AuthenticationService.generateToken(user.toObject()),
           },
         });
       } else {
@@ -32,9 +32,10 @@ export async function login(req: Request, res: Response) {
       });
     }
   } catch (error) {
+    console.log(error);
     res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      // message:error?.message,
+      message: error,
     });
   }
 }
@@ -61,14 +62,15 @@ export async function signup(req: Request, res: Response) {
         message: "User created successfully",
         data: {
           user: createdUser,
-          token: AuthenticationService.generateToken(createdUser),
+          token: AuthenticationService.generateToken(createdUser.toObject()),
         },
       });
     }
   } catch (error) {
+    console.log(error);
     res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      // message:error?.message,
+      message: error,
     });
   }
 }

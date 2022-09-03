@@ -3,6 +3,7 @@ import Mongoose from "mongoose";
 import dotenv from "dotenv";
 import router from "./src/routes";
 import path from "path";
+import Exceptionhandler from "./src/utils/exceptionhandler";
 
 const app = express.default();
 
@@ -20,6 +21,14 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "src/views"));
 
 app.use("/", router);
+
+app.use(Exceptionhandler);
+
+app.use((req, res, next) => {
+  res.status(404).json({
+    message: "Not found error",
+  });
+});
 
 app.listen(process.env.PORT, () => {
   console.log(`Server started at ${process.env.PORT}`);

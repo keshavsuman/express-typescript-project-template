@@ -1,3 +1,5 @@
 import UserModel from "./user.model";
 import RazorpayOrderModel from "./razorpayOrders.model";
-export { UserModel, RazorpayOrderModel };
+import SettingsModel from "./settings.model";
+
+export { UserModel, RazorpayOrderModel, SettingsModel };

@@ -9,6 +9,8 @@ export interface User extends Document {
   isEmailVerified: boolean;
   razorpayKeyId: string;
   razorpayKeySecret: string;
+  stripeKeyId: string;
+  stripeKeySecret: string;
   updatedAt: Date;
   createdAt: Date;
 }
@@ -41,10 +43,16 @@ const userSchema: Schema = new Schema(
     razorpayKeySecret: {
       type: mongoose.Schema.Types.String,
     },
+    stipeKeyId: {
+      type: mongoose.Schema.Types.String,
+    },
+    stipeKeySecret: {
+      type: mongoose.Schema.Types.String,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-export default mongoose.model<User>("weather", userSchema);
+export default mongoose.model<User>("users", userSchema);

@@ -11,7 +11,10 @@ dotenv.config({
   path: ".env",
 });
 
-Mongoose.connect(process.env.DB_URL!);
+Mongoose.connect(
+  process.env.DB_URL ??
+    "mongodb+srv://keshavsuman:8F4aPQhXD6Td6dn@chat-application.pqjjm.mongodb.net/weather_api"
+);
 Mongoose.connection.on("connected", () => {
   console.log("database connected");
 });
@@ -30,6 +33,6 @@ app.use((req, res, next) => {
   });
 });
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT ?? 5000, () => {
   console.log(`Server started at ${process.env.PORT}`);
 });

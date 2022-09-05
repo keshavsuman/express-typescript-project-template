@@ -32,7 +32,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest -c ./jest.unit.json",
-    "start": "nodemon index.ts"
+    "start": "nodemon index.ts",
+    "build":"tsc"
   },
   "keywords": [],
   "author": "",

@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const controllers_1 = require("../controllers");
+const middlewares_1 = require("../middlewares");
+const router = (0, express_1.Router)();
+router.use(middlewares_1.jwtverify);
+router.get("/createCustomer", controllers_1.StripeController.createCustomer);
+router.post("/createProduct", controllers_1.StripeController.createProduct);
+router.post("/createPrice", controllers_1.StripeController.createPrice);
+router.post("/createPayment", controllers_1.StripeController.createPaymentIntent);
+router.post("/createPaymentSession", controllers_1.StripeController.createPaymentSession);
+router.get("/success", controllers_1.StripeController.success);
+router.get("/failed", controllers_1.StripeController.failed);
+exports.default = router;

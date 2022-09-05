@@ -6,5 +6,5 @@ const router = Router();
 
 router.use(jwtverify);
 router.get("/", SettingsController.getSettings);
-
+router.put("/updateSettings", SettingsController.updateSettings);
 export default router;

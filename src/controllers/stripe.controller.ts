@@ -5,10 +5,16 @@ import { StripeService } from "../service";
 export async function createPaymentIntent(req: Request, res: Response) {
   try {
     const { amount, currency } = req.body;
-    const payment = await StripeService.createPaymentIntent(amount, currency);
-    res.status(httpStatus.OK).send({
-      data: payment,
-    });
+    // const access_secret =
+    //   "sk_test_51LcA81SCGtvotFzJmkd9YS7clchQVR9BGehPsi8Q9Mxf6U5gYSLZp6fIis9emIq6Oxk1vwN4EHEUtIHCHxNKUh8I00qLkPoeqL";
+    // const payment = await StripeService.createPaymentIntent(
+    //   amount,
+    //   currency,
+    //   access_secret
+    // );
+    // res.status(httpStatus.OK).send({
+    //   data: payment,
+    // });
   } catch (error) {
     console.log(error);
     res.status(httpStatus.OK).send({
@@ -20,13 +26,13 @@ export async function createPaymentIntent(req: Request, res: Response) {
 
 export async function createPaymentSession(req: Request, res: Response) {
   try {
-    const { productName, currency, amount } = req.body;
-    const session = await StripeService.createSession(
-      productName,
-      currency,
-      amount
-    );
-    res.status(httpStatus.OK).send(session);
+    // const { productName, currency, amount } = req.body;
+    // const session = await StripeService.createSession(
+    //   productName,
+    //   currency,
+    //   amount
+    // );
+    // res.status(httpStatus.OK).send(session);
   } catch (error) {
     console.log(error);
     res.status(httpStatus.OK).send({

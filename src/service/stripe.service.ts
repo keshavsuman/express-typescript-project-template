@@ -8,14 +8,17 @@ enum PaymentModeEnum {
   SETUP = "setup",
 }
 
-export async function createPaymentIntent(amount: number, currency: string) {
+export async function createPaymentIntent(
+  amount: number,
+  currency: string,
+  keySecret: string,
+  success_url: string,
+  failure_url: string
+) {
   // Create a PaymentIntent with the order amount and currency
-  const stripe = new Stripe(
-    "sk_test_51LcA81SCGtvotFzJmkd9YS7clchQVR9BGehPsi8Q9Mxf6U5gYSLZp6fIis9emIq6Oxk1vwN4EHEUtIHCHxNKUh8I00qLkPoeqL",
-    {
-      apiVersion: "2022-08-01",
-    }
-  );
+  const stripe = new Stripe(keySecret, {
+    apiVersion: "2022-08-01",
+  });
   const paymentIntent = await stripe.paymentIntents.create({
     amount: amount,
     currency: currency,
@@ -23,7 +26,6 @@ export async function createPaymentIntent(amount: number, currency: string) {
       enabled: true,
     },
   });
-  console.log(paymentIntent);
   return paymentIntent;
 }
 
@@ -87,35 +89,41 @@ export async function createProduct() {
 }
 
 /**
- * @description
+ * @description This fucntion s used to create the
  */
 export async function createSession(
   productName: string,
+  amount: number,
   currency: string,
-  amount: number
+  access_secret: string,
+  success_url: string,
+  failure_url: string,
+  productDescription: string = ""
 ) {
-  const stripe = new Stripe(
-    "sk_test_51LcA81SCGtvotFzJmkd9YS7clchQVR9BGehPsi8Q9Mxf6U5gYSLZp6fIis9emIq6Oxk1vwN4EHEUtIHCHxNKUh8I00qLkPoeqL",
-    {
-      apiVersion: "2022-08-01",
-    }
-  );
+  const stripe = new Stripe(access_secret, {
+    apiVersion: "2022-08-01",
+  });
+
+  const productData: any = {
+    name: productName,
+  };
+  if (productDescription.length > 0) {
+    productData.description = productDescription;
+  }
   return await stripe.checkout.sessions.create({
     line_items: [
       {
         price_data: {
           currency: currency,
-          product_data: {
-            name: productName,
-          },
+          product_data: productData,
           unit_amount: amount,
         },
         quantity: 1,
       },
     ],
     mode: PaymentModeEnum.PAYMENT,
-    success_url: `${process.env.DOMAIN}/success.html`,
-    cancel_url: `${process.env.DOMAIN}/cancel.html`,
+    success_url: success_url,
+    cancel_url: failure_url,
   });
 }
 

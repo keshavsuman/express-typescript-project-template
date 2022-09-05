@@ -6,18 +6,18 @@ import { RazorpayService } from "../service";
 
 export async function createOrder(req: Request, res: Response) {
   try {
-    const { amount, currency } = req.body;
-    const order = await RazorpayService.createOrder(
-      new mongoose.Types.ObjectId(res.get("userId")),
-      amount,
-      currency
-    );
-    await RazorpayOrderModel.create({ ...order, orderId: order.id });
-    res.status(httpStatus.CREATED).send({
-      message: "Order created successfully",
-      data: { ...order, paymentURL: "" },
-      status: httpStatus.CREATED,
-    });
+    // const { amount, currency } = req.body;
+    // const order = await RazorpayService.createOrder(
+    //   // new mongoose.Types.ObjectId(res.get("userId")),
+    //   amount,
+    //   currency,
+    // );
+    // await RazorpayOrderModel.create({ ...order, orderId: order.id });
+    // res.status(httpStatus.CREATED).send({
+    //   message: "Order created successfully",
+    //   data: { ...order, paymentURL: "" },
+    //   status: httpStatus.CREATED,
+    // });
   } catch (error) {
     console.log(error);
     res

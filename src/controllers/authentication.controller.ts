@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 import { User } from "../models/user.model";
-import { AuthenticationService } from "../service";
+import { AuthenticationService, SettingsService } from "../service";
 
 export async function login(req: Request, res: Response) {
   try {
@@ -57,6 +57,7 @@ export async function signup(req: Request, res: Response) {
         password: AuthenticationService.hashPassword(password),
       };
       const createdUser = await AuthenticationService.createUser(user as User);
+      await SettingsService.createSettings(createdUser._id);
       res.status(httpStatus.OK).send({
         statusCode: httpStatus.OK,
         message: "User created successfully",

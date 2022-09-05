@@ -1,6 +1,6 @@
 import mongoose, { ObjectId } from "mongoose";
 import Razorpay from "razorpay";
-import { UserModel } from "../models";
+import { SettingsModel, UserModel } from "../models";
 import CryptoJS from "crypto-js";
 import userModel, { User } from "../models/user.model";
 
@@ -12,18 +12,14 @@ import userModel, { User } from "../models/user.model";
  * @returns {Promise<Array>}
  */
 export async function createOrder(
-  userId: mongoose.Types.ObjectId,
   amount: Number,
-  currency: string
+  currency: string,
+  access_key: string,
+  access_secret: string
 ) {
-  const user: User | null = await userModel.findById(userId, {
-    razorpayKeyId: 1,
-    razorpayKeySecret: 1,
-  });
-  // console.log(user);
   const razorpay = new Razorpay({
-    key_id: user?.razorpayKeyId,
-    key_secret: user?.razorpayKeySecret,
+    key_id: access_key,
+    key_secret: access_secret,
   });
 
   return await razorpay.orders.create({

@@ -1,6 +1,13 @@
 import mongoose, { Schema } from "mongoose";
 
-const subCategorySchema: Schema = new mongoose.Schema(
+export interface SubCategory extends Document {
+  categoryId: mongoose.Schema.Types.ObjectId;
+  name: string;
+  image: string;
+  keywords: Array<string>;
+}
+
+const subCategorySchema: Schema = new mongoose.Schema<SubCategory>(
   {
     categoryId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -15,7 +22,7 @@ const subCategorySchema: Schema = new mongoose.Schema(
     image: {
       type: String,
       trim: true,
-      default: config.app.defaultPlaceholderImage,
+      // default: config.app.defaultPlaceholderImage,
     },
     keywords: [
       {
@@ -30,4 +37,4 @@ const subCategorySchema: Schema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("subCategory", subCategorySchema);
+export default mongoose.model<SubCategory>("subCategory", subCategorySchema);

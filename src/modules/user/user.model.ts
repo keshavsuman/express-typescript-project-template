@@ -21,7 +21,7 @@ export interface User extends Document {
   status: string;
   deviceType: DeviceType;
   notificationToken: string;
-  authenticationToken: string;
+  authenticationToken: string | undefined;
   lastLogin: Date;
   isBlocked: boolean;
   isActive: boolean;

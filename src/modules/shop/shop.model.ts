@@ -5,7 +5,7 @@ export interface Shop extends Document {
   category: mongoose.Schema.Types.ObjectId;
   subcategory: Array<mongoose.Schema.Types.ObjectId>;
   keywords: Array<string>;
-  user: mongoose.Schema.Types.ObjectId;
+  user: mongoose.Types.ObjectId;
   coverImage: string;
   image: string;
   catalogueImage: string;

@@ -7,14 +7,8 @@ export default class HttpResponse {
     statusCode: number,
     message: string,
     data?: any,
-    error?: Error
+    error?: any
   ) {
-    if (
-      statusCode === httpStatus.BAD_REQUEST ||
-      httpStatus.INTERNAL_SERVER_ERROR
-    ) {
-      console.log(error);
-    }
     res.status(statusCode).send({
       statusCode: statusCode,
       message: message,

@@ -1,4 +1,4 @@
-import { ObjectId } from "mongoose";
+import { ObjectId, Types } from "mongoose";
 import otpModel, { Otp } from "./otp.model";
 import userModel, { User } from "./user.model";
 import jwt from "jsonwebtoken";
@@ -64,7 +64,8 @@ export async function deleteOTPByPhone(phone: number): Promise<boolean> {
  * @author Keshav suman
  */
 export function generateAuthToken(user: User): string {
-  const token = jwt.sign(user, process.env.JWT_SECRET!);
+  user.authenticationToken = undefined;
+  const token = jwt.sign(user.toObject(), process.env.JWT_SECRET!);
   return token;
 }
 /**
@@ -83,5 +84,11 @@ export async function saveOTP(phone: number, otp: number): Promise<Otp> {
 }
 
 export async function verifyOTP(phone: number, otp: number): Promise<boolean> {
-  return true;
+  const existingOtp: Otp | null = await getOTPByPhone(phone);
+  if (existingOtp && existingOtp.otp == otp) return true;
+  return false;
+}
+
+export async function getUserById(userId: Types.ObjectId) {
+  return await userModel.findById(userId);
 }

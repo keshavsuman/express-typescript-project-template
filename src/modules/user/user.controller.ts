@@ -7,54 +7,61 @@ import * as userService from "./user.service";
 import moment from "moment";
 
 export async function sendOTP(req: Request, res: Response) {
-  const { phone } = req.body;
-  const user: User | null = await userService.getUserbyPhone(phone);
-  if (user && user.isBlocked) {
-    new HttpResponse(
-      res,
-      httpStatus.BAD_REQUEST,
-      "Your account is blocked,Please contact admin"
-    );
-  }
-
-  const previousOTPData = await userService.getOTPByPhone(phone);
-  if (previousOTPData) {
-    const lastSentTime = moment(previousOTPData.createdAt);
-    const diffrence = lastSentTime.diff(moment.now(), "seconds");
-    if (diffrence <= parseInt(process.env.OTP_EXPIRATION_SECONDS!)) {
+  try {
+    const { phone } = req.body;
+    const user: User | null = await userService.getUserbyPhone(phone);
+    if (user && user.isBlocked) {
       new HttpResponse(
         res,
         httpStatus.BAD_REQUEST,
-        `Please wait ${process.env.OTP_REQUEST_AFTER_SECONDS} seconds for another OTP_EXPIRATION_SECONDS`
+        "Your account is blocked,Please contact admin"
       );
     }
-  }
 
-  let otp = 123456;
-  let data = "test315f-6d5f-40f9-fake-response";
-  // const sendRealOTP = await settingService.getSettingValueBySettingName(
-  //   "sendRealOTP"
-  // );
-  // if (sendRealOTP && sendRealOTP === "Yes") {
-  //   otp = Math.floor(100000 + Math.random() * 900000);
-  //   // data = await smsHelper.sendOTP(phone, otp);
-  // }
+    const previousOTPData = await userService.getOTPByPhone(phone);
+    if (previousOTPData) {
+      const lastSentTime = moment(previousOTPData.createdAt);
+      const diffrence = moment(moment.now()).diff(lastSentTime, "seconds");
+      if (diffrence <= parseInt(process.env.OTP_EXPIRATION_SECONDS!)) {
+        return new HttpResponse(
+          res,
+          httpStatus.BAD_REQUEST,
+          `Please wait ${process.env.OTP_REQUEST_AFTER_SECONDS} seconds for another OTP`
+        );
+      }
+    }
 
-  if (!data) {
-    new HttpResponse(res, httpStatus.OK, "OTP not sent,Please try again");
-  }
-  const response: Otp = await userService.saveOTP(phone, otp);
-  if (!response) {
-    new HttpResponse(
+    let otp = 123456;
+    let data = "test315f-6d5f-40f9-fake-response";
+    // const sendRealOTP = await settingService.getSettingValueBySettingName(
+    //   "sendRealOTP"
+    // );
+    // if (sendRealOTP && sendRealOTP === "Yes") {
+    //   otp = Math.floor(100000 + Math.random() * 900000);
+    //   // data = await smsHelper.sendOTP(phone, otp);
+    // }
+
+    if (!data) {
+      return new HttpResponse(
+        res,
+        httpStatus.OK,
+        "OTP not sent,Please try again"
+      );
+    }
+    const response: Otp = await userService.saveOTP(phone, otp);
+    return new HttpResponse(res, httpStatus.OK, "OTP sent successfully", {
+      error: false,
+      message: data,
+    });
+  } catch (error) {
+    return new HttpResponse(
       res,
       httpStatus.OK,
-      "There is some error, Please try again"
+      (error as Error).message,
+      {},
+      error
     );
   }
-  new HttpResponse(res, httpStatus.OK, "OTP sent successfully", {
-    error: false,
-    message: data,
-  });
 }
 
 export async function verifyOTP(req: Request, res: Response) {

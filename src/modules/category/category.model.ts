@@ -1,6 +1,20 @@
 import mongoose, { Schema } from "mongoose";
 
-const categorySchema: Schema = new mongoose.Schema(
+export enum CategoryPositionEnum {
+  Top = "top",
+  Bottom = "bottom",
+  Regular = "regular",
+}
+
+export interface Category extends Document {
+  name: string;
+  position: CategoryPositionEnum;
+  order: number;
+  sequence: number;
+  image: string;
+}
+
+const categorySchema: Schema = new mongoose.Schema<Category>(
   {
     name: {
       type: String,
@@ -12,7 +26,7 @@ const categorySchema: Schema = new mongoose.Schema(
     position: {
       type: String,
       required: true,
-      enum: ["top", "bottom", "regular"],
+      enum: CategoryPositionEnum,
       trim: true,
     },
     order: {
@@ -29,7 +43,7 @@ const categorySchema: Schema = new mongoose.Schema(
     image: {
       type: String,
       trim: true,
-      default: config.app.defaultPlaceholderImage,
+      // default: config.app.defaultPlaceholderImage,
     },
   },
   {
@@ -37,4 +51,4 @@ const categorySchema: Schema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("category", categorySchema);
+export default mongoose.model<Category>("category", categorySchema);
